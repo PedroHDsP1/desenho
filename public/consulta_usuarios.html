@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuários Cadastrados</title>
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+        <div class="container-fluid">
+            <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Início</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="formulario.html">Formulário</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="ver_usuarios">Consultar Usuários</a>
+            </li>
+            </ul>
+        </div>
+    </nav>
+    <h1>Usuários Cadastrados</h1>
+    <input type="text" id="busca">
+    <button type="button" onclick="buscaUsuario()">Buscar</button>
+    <div id="tabela"></div>
+    <script>
+        async function carregar_usuarios(mensagem) {
+            try{
+                const response = await fetch('./buscar-usuarios', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type':'application/json'
+                    }
+                });
+
+                const result = await response.json();
+                if(mensagem){
+                    document.getElementById('tabela').innerHTML = mensagem
+                }
+                var dados = "<table border='1'>";
+                dados += "<tr><th>Nome</th><th>E-mail</th></tr>";
+                result.usuarios.forEach((row) => {
+                    dados+="<tr>";
+                    dados+="<td>"+row.nome+"</td>";
+                    dados+="<td>"+row.email+"</td>";
+                    dados+="<td><button type='button' onclick='editar("+row.id_usuario+")'>Editar</button></td>";
+                    dados+="<td><button type='button' onclick='excluir(\""+row.id_usuario+"\")'>Excluir</button></td>";
+                    dados+="</tr>";
+                });
+                dados += "</table>";
+                document.getElementById('tabela').innerHTML += dados;
+            } catch (error){
+                console.log('Error: ', error);
+            }
+        };
+        carregar_usuarios();
+        async function buscaUsuario() {
+            var texto = document.getElementById('busca').value;
+            const formData = {
+                nome: texto
+            };
+            try{
+                const response = await fetch('./procurar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type':'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                
+                document.getElementById('tabela').innerHTML = result.message;
+                var dados = "<table border='1'>";
+                dados += "<tr><th>Nome</th><th>E-mail</th></tr>";
+                result.usuarios.forEach((row) => {
+                    dados+="<tr>";
+                    dados+="<td>"+row.nome+"</td>";
+                    dados+="<td>"+row.email+"</td>";
+                    dados+="<td><button type='button' onclick='editar("+row.id_usuario+")'>Editar</button></td>";
+                    dados+="<td><button type='button' onclick='editar("+row.id_usuario+")'>Excluir</button></td>";
+                    dados+="</tr>";
+                });
+                dados += "</table>";
+                document.getElementById('tabela').innerHTML += dados;
+            } catch (error){
+                console.log('Error: ', error);
+            }
+        };
+        function editar(id){
+            window.location.href = "editar.html?id="+id;
+        }
+        async function excluir(id_usuario){
+            const formData = {
+                id: id_usuario
+            };
+            try{
+                const response = await fetch('./excluir_usuario', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type':'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                carregar_usuarios(result.message);
+                if(mensagem){
+                    document.getElementById('tabela').innerHTML += mensagem
+                }
+                
+            } catch (error){
+                console.log('Error: ', error);
+            }
+    }
+    </script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
