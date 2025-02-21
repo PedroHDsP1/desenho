@@ -40,7 +40,7 @@ app.post('/registra-usuario', (req, res) => {
               console.log('Conectou no banco de dados!');
       });
 
-      db.get('SELECT email FROM usuario WHERE email = ?', [email], async (error, result) => {
+      db.get('SELECT desenho_P FROM personagem WHERE desenho_P = ?', [desenho_P], async (error, result) => {
           if(error){
               console.log(error)
           }
@@ -58,7 +58,7 @@ app.post('/registra-usuario', (req, res) => {
           } else{
               let senha_criptografada = await bcrypt.hash(senha, 8)
 
-              db.run('INSERT INTO usuario(nome, email, senha) VALUES (?, ?, ?)', [nome, email, senha_criptografada], (error2) => {
+              db.run('INSERT INTO personagem(nome_P, desenho_P, senha) VALUES (?, ?, ?)', [nome, email, senha_criptografada], (error2) => {
                   if(error2) {
                       console.log(error2)
                   } else {
@@ -106,7 +106,7 @@ app.post('/edita-usuario', (req, res) => {
           if(error){
               console.log(error)
           }
-          else if(result && result.id_usuario != id) {
+          else if(result && result.id_personagem != id) {
               db.close((err) => {
                   if (err) {
                   return console.error(err.message);
@@ -118,7 +118,7 @@ app.post('/edita-usuario', (req, res) => {
                   message: 'Este e-mail já está em uso!',
               });
           } else{
-              db.run('UPDATE usuario SET nome = ?, email = ? WHERE id_usuario = ?', [nome, email, id], (error2) => {
+              db.run('UPDATE usuario SET nome = ?, email = ? WHERE id_personagem = ?', [nome, email, id], (error2) => {
                   if(error2) {
                       console.log(error2)
                   } else {
@@ -210,7 +210,7 @@ app.post('/procurarId', (req, res) => {
     console.log('Conectou com o banco de dados!');
   });
 
-  db.get(`SELECT * FROM usuario WHERE id_usuario = ?`, [id], (err, row) => {
+  db.get(`SELECT * FROM usuario WHERE id_personagem = ?`, [id], (err, row) => {
     if (err) {
       return console.error(err.message);
     }
@@ -240,7 +240,7 @@ app.post('/excluir_usuario', (req, res) => {
     console.log('Conectou com o banco de dados!');
   });
 
-  db.run(`DELETE FROM usuario WHERE id_usuario = ?`, [id], (err, row) => {
+  db.run(`DELETE FROM usuario WHERE id_personagem = ?`, [id], (err, row) => {
     if (err) {
       return console.error(err.message);
     }

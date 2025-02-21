@@ -1,18 +1,18 @@
 const form = document.getElementById('form_editar');
-const nome = document.getElementById('nome');
-const email = document.getElementById('email');
+const nome_P = document.getElementById('nome_P');
+const desenho_P = document.getElementById('desenho_P');
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const formData = {
-        nome: nome.value,
-        email: email.value,
+        nome: nome_P.value,
+        email: desenho_P.value,
         id: id
     };
 
     try{
-        const response = await fetch('/edita-usuario', {
+        const response = await fetch('/edita-personagem', {
             method: 'POST',
             headers: {
                 'Content-Type':'application/json'
@@ -23,8 +23,8 @@ form.addEventListener('submit', async (e) => {
         const result = await response.json();
         document.getElementById('message').innerHTML = result.message;
         if(result.status != 'failed'){
-            nome.value = '';
-            email.value= '';
+            nome_P.value = '';
+            desenho_P.value= '';
         }
     } catch (error){
         console.log('Error: ', error);

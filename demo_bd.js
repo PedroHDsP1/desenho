@@ -7,7 +7,7 @@ let db = new sqlite3.Database('./db/banco.db', (err) => {
   });
 
   // insere um registro no banco de dados
-  db.run(`INSERT INTO usuario(nome, email, senha) VALUES(?,?,?)`, ['Clécio','clecio@teste.com','123'], function(err) {
+  db.run(`INSERT INTO personagem(nome_P, desenho_P, idade) VALUES(?,?,?)`, ['Clécio','clecio@teste.com','123'], function(err) {
     if (err) {
       return console.log(err.message);
     }

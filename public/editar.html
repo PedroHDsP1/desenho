@@ -21,7 +21,7 @@
                     <a class="nav-link active" href="formulario.html">Formulário</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="ver_usuarios">Consultar Usuários</a>
+                    <a class="nav-link" href="ver_personagem">Consultar Personagens</a>
                 </li>
             </ul>
         </div>
@@ -29,12 +29,12 @@
     <h1>Editar Usuário</h1>
     <form id="form_editar" action="registra">
         <p>
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome" name="nome">
+            <label for="nome_P">Nome:</label>
+            <input type="text" id="nome_P" name="nome_P">
         </p>
         <p>
-            <label for="email">E-mail:</label>
-            <input type="text" id="email" name="email">
+            <label for="desenho_P">E-mail:</label>
+            <input type="text" id="desenho_P" name="desenho_P">
         </p>
 
         <input type="submit" value="Enviar">
@@ -62,8 +62,8 @@
                 });
 
                 const result = await response.json();
-                document.getElementById("nome").value = result.nome;
-                document.getElementById("email").value = result.email;
+                document.getElementById("nome_P").value = result.nome_P;
+                document.getElementById("desenho_P").value = result.desenho_P;
             } catch (error) {
                 console.log('Error: ', error);
             }

@@ -1,6 +1,6 @@
-CREATE TABLE usuario(
-    id_usuario INTEGER PRIMARY KEY,
-    nome text NOT NULL,
-    email text NOT NULL UNIQUE,
-    senha text NOT NULL
+CREATE TABLE personagem(
+    id_personagem INTEGER PRIMARY KEY,
+    nome_P text NOT NULL,
+    desenho_P text NOT NULL,
+    idade int NOT NULL
 );

@@ -19,7 +19,7 @@
                 <a class="nav-link active" href="formulario.html">Formulário</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="ver_usuarios">Consultar Usuários</a>
+                <a class="nav-link" href="ver_personagem">Consultar Personagens</a>
             </li>
             </ul>
         </div>
@@ -27,22 +27,17 @@
     <h1>Formulário de Cadastro</h1>
     <form id="form_inscricao" action="registra">
         <p>
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome" name="nome">
+            <label for="nome_P">Nome:</label>
+            <input type="text" id="nome_P" name="nome_P">
         </p>
         <p>
-            <label for="email">E-mail:</label>
-            <input type="text" id="email" name="email">
+            <label for="desenho_P">Desenho do Personagem:</label>
+            <input type="text" id="desenho_P" name="desenho_P">
         </p>
         <p>
-            <label for="senha">Senha:</label>
-            <input type="password" id="senha" name="senha">
+            <label for="idade">Idade:</label>
+            <input type="number" id="idade" name="idade">
         </p>
-        <p>
-            <label for="conf_senha">Confirmação de senha:</label>
-            <input type="password" id="conf_senha" name="conf_senha">
-        </p>
-        
         <input type="submit" value="Enviar">
     </form>
     <p id="message"></p>

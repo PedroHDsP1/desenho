@@ -19,19 +19,19 @@
                 <a class="nav-link" href="formulario.html">Formulário</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="ver_usuarios">Consultar Usuários</a>
+                <a class="nav-link active" href="ver_personagem">Consultar Usuários</a>
             </li>
             </ul>
         </div>
     </nav>
     <h1>Consulta dos Cadastrados</h1>
     <input type="text" id="busca">
-    <button type="button" onclick="buscaUsuario()">Buscar</button>
+    <button type="button" onclick="buscaPersonagem()">Buscar</button>
     <div id="tabela"></div>
     <script>
-        async function carregar_usuarios(mensagem) {
+        async function carregar_personagem(mensagem) {
             try{
-                const response = await fetch('./buscar-usuarios', {
+                const response = await fetch('./buscar-personagem', {
                     method: 'POST',
                     headers: {
                         'Content-Type':'application/json'
@@ -46,10 +46,10 @@
                 dados += "<tr><th>Nome</th><th>E-mail</th></tr>";
                 result.usuarios.forEach((row) => {
                     dados+="<tr>";
-                    dados+="<td>"+row.nome+"</td>";
-                    dados+="<td>"+row.email+"</td>";
-                    dados+="<td><button type='button' onclick='editar("+row.id_usuario+")'>Editar</button></td>";
-                    dados+="<td><button type='button' onclick='excluir(\""+row.id_usuario+"\")'>Excluir</button></td>";
+                    dados+="<td>"+row.nome_P+"</td>";
+                    dados+="<td>"+row.desenho_P+"</td>";
+                    dados+="<td><button type='button' onclick='editar("+row.id_personagem+")'>Editar</button></td>";
+                    dados+="<td><button type='button' onclick='excluir(\""+row.id_personagem+"\")'>Excluir</button></td>";
                     dados+="</tr>";
                 });
                 dados += "</table>";
@@ -58,11 +58,11 @@
                 console.log('Error: ', error);
             }
         };
-        carregar_usuarios();
-        async function buscaUsuario() {
+        carregar_personagem();
+        async function buscaPersonagem() {
             var texto = document.getElementById('busca').value;
             const formData = {
-                nome: texto
+                nome_P: texto
             };
             try{
                 const response = await fetch('./procurar', {
@@ -77,13 +77,13 @@
                 
                 document.getElementById('tabela').innerHTML = result.message;
                 var dados = "<table border='1'>";
-                dados += "<tr><th>Nome</th><th>E-mail</th></tr>";
+                dados += "<tr><th>Nome</th><th>Desenho do Personagem</th></tr>";
                 result.usuarios.forEach((row) => {
                     dados+="<tr>";
-                    dados+="<td>"+row.nome+"</td>";
-                    dados+="<td>"+row.email+"</td>";
-                    dados+="<td><button type='button' onclick='editar("+row.id_usuario+")'>Editar</button></td>";
-                    dados+="<td><button type='button' onclick='editar("+row.id_usuario+")'>Excluir</button></td>";
+                    dados+="<td>"+row.nome_P+"</td>";
+                    dados+="<td>"+row.desenho_P+"</td>";
+                    dados+="<td><button type='button' onclick='editar("+row.id_personagem+")'>Editar</button></td>";
+                    dados+="<td><button type='button' onclick='editar("+row.id_personagem+")'>Excluir</button></td>";
                     dados+="</tr>";
                 });
                 dados += "</table>";
@@ -95,12 +95,12 @@
         function editar(id){
             window.location.href = "editar.html?id="+id;
         }
-        async function excluir(id_usuario){
+        async function excluir(id_personagem){
             const formData = {
-                id: id_usuario
+                id: id_personagem
             };
             try{
-                const response = await fetch('./excluir_usuario', {
+                const response = await fetch('./excluir_personagem', {
                     method: 'POST',
                     headers: {
                         'Content-Type':'application/json'
@@ -109,7 +109,7 @@
                 });
 
                 const result = await response.json();
-                carregar_usuarios(result.message);
+                carregar_personagem(result.message);
                 if(mensagem){
                     document.getElementById('tabela').innerHTML += mensagem
                 }
