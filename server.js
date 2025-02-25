@@ -16,14 +16,11 @@ app.get('/formulario.html', (req, res) => {
 });
 
 app.post('/registra-usuario', (req, res) => {
-  const {nome, email, senha, conf_senha} = req.body;
+  const {nome_P, desenho_P, idade} = req.body;
   // Aqui começa a validação dos campos do formulário
   let erro = "";
-  if(nome.length < 1 || email.length < 1 || senha.length < 1 || conf_senha.length < 1){
+  if(nome.length < 1 || desenho_P.length < 1 || idade.length < 1){
       erro += 'Por favor, preencha todos os campos corretamente!<br>';
-  }
-  if(senha != conf_senha){
-      erro += 'As senhas digitadas não são iguais!<br>';
   }
   if(erro){
       res.status(200).json({
@@ -56,9 +53,7 @@ app.post('/registra-usuario', (req, res) => {
                   message: 'Este e-mail já está em uso!',
               });
           } else{
-              let senha_criptografada = await bcrypt.hash(senha, 8)
-
-              db.run('INSERT INTO personagem(nome_P, desenho_P, senha) VALUES (?, ?, ?)', [nome, email, senha_criptografada], (error2) => {
+              db.run('INSERT INTO personagem(nome_P, desenho_P, idade) VALUES (?, ?, ?)', [nome_P, desenho_P, idade], (error2) => {
                   if(error2) {
                       console.log(error2)
                   } else {
@@ -81,10 +76,10 @@ app.post('/registra-usuario', (req, res) => {
 });
     
 app.post('/edita-usuario', (req, res) => {
-  const {nome, email, id} = req.body;
+  const {nome_P, desenho_P, idade} = req.body;
   // Aqui começa a validação dos campos do formulário
   let erro = "";
-  if(nome.length < 1 || email.length < 1){
+  if(nome_P.length < 1 || idade.length < 1){
       erro += 'Por favor, preencha todos os campos corretamente!<br>';
   }
   if(erro){
@@ -102,7 +97,7 @@ app.post('/edita-usuario', (req, res) => {
               console.log('Conectou no banco de dados!');
       });
 
-      db.get('SELECT * FROM usuario WHERE email = ?', [email], async (error, result) => {
+      db.get('SELECT * FROM personagem WHERE desenho_P = ?', [desenho_P], async (error, result) => {
           if(error){
               console.log(error)
           }
@@ -115,10 +110,10 @@ app.post('/edita-usuario', (req, res) => {
               });
               return res.status(200).json({
                   status: 'failed',
-                  message: 'Este e-mail já está em uso!',
+                  message: 'Este desenho já está em uso!',
               });
           } else{
-              db.run('UPDATE usuario SET nome = ?, email = ? WHERE id_personagem = ?', [nome, email, id], (error2) => {
+              db.run('UPDATE personagem SET nome_P = ?, desenho_P = ? WHERE id_personagem = ?', [nome_P, desenho_P, id_personagem], (error2) => {
                   if(error2) {
                       console.log(error2)
                   } else {
@@ -152,7 +147,7 @@ app.post('/buscar-usuarios', (req, res) => {
     console.log('Conectou com o banco de dados!');
   });
 
-  db.all(`SELECT * FROM usuario`, [], (err, rows) => {
+  db.all(`SELECT * FROM personagem`, [], (err, rows) => {
     if (err) {
       return console.error(err.message);
     }
@@ -160,7 +155,7 @@ app.post('/buscar-usuarios', (req, res) => {
     return res.status(200).json({
       status: 'success',
       message: 'Dados buscados com sucesso!',
-      usuarios: rows
+      personagens: rows
     });
   });
 
@@ -173,7 +168,7 @@ app.post('/buscar-usuarios', (req, res) => {
 });
 
 app.post('/procurar', (req, res) => {
-  const {nome} = req.body;
+  const {nome_P} = req.body;
   let db = new sqlite3.Database('./db/banco.db', (err) => {
     if (err) {
       return console.error(err.message);
@@ -181,7 +176,7 @@ app.post('/procurar', (req, res) => {
     console.log('Conectou com o banco de dados!');
   });
 
-  db.all(`SELECT * FROM usuario WHERE nome = ?`, [nome], (err, rows) => {
+  db.all(`SELECT * FROM personagem WHERE nome_P = ?`, [nome_P], (err, rows) => {
     if (err) {
       return console.error(err.message);
     }
@@ -189,7 +184,7 @@ app.post('/procurar', (req, res) => {
     return res.status(200).json({
       status: 'success',
       message: 'Dados buscados com sucesso!',
-      usuarios: rows
+      personagens: rows
     });
   });
 
@@ -210,7 +205,7 @@ app.post('/procurarId', (req, res) => {
     console.log('Conectou com o banco de dados!');
   });
 
-  db.get(`SELECT * FROM usuario WHERE id_personagem = ?`, [id], (err, row) => {
+  db.get(`SELECT * FROM personagem WHERE id_personagem = ?`, [id_personagem], (err, row) => {
     if (err) {
       return console.error(err.message);
     }
@@ -218,8 +213,8 @@ app.post('/procurarId', (req, res) => {
     return res.status(200).json({
       status: 'success',
       message: 'Dados buscados com sucesso!',
-      nome: row.nome,
-      email: row.email
+      nome_P: row.nome_P,
+      desenho_P_P: row.desenho_P
     });
   });
 
@@ -232,7 +227,7 @@ app.post('/procurarId', (req, res) => {
 });
 
 app.post('/excluir_usuario', (req, res) => {
-  const {id} = req.body;
+  const {id_personagem} = req.body;
   let db = new sqlite3.Database('./db/banco.db', (err) => {
     if (err) {
       return console.error(err.message);
@@ -240,14 +235,14 @@ app.post('/excluir_usuario', (req, res) => {
     console.log('Conectou com o banco de dados!');
   });
 
-  db.run(`DELETE FROM usuario WHERE id_personagem = ?`, [id], (err, row) => {
+  db.run(`DELETE FROM usuario WHERE id_personagem = ?`, [id_personagem], (err, row) => {
     if (err) {
       return console.error(err.message);
     }
     
     return res.status(200).json({
       status: 'success',
-      message: 'Usuario exluido com sucesso XQDL!'
+      message: 'Personagem exluido com sucesso XQDL!'
     });
   });
 
