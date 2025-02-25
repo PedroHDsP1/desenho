@@ -76,10 +76,10 @@ app.post('/registra-personagem', (req, res) => {
 });
     
 app.post('/edita-usuario', (req, res) => {
-  const {nome_P, desenho_P, idade} = req.body;
+  const {nome_P, desenho_P, id_personagem} = req.body;
   // Aqui começa a validação dos campos do formulário
   let erro = "";
-  if(nome_P.length < 1 || idade.length < 1){
+  if(nome_P.length < 1 || desenho_P.length < 1){
       erro += 'Por favor, preencha todos os campos corretamente!<br>';
   }
   if(erro){
@@ -235,16 +235,16 @@ app.post('/excluir_usuario', (req, res) => {
     console.log('Conectou com o banco de dados!');
   });
 
-  db.run(`DELETE FROM personagem WHERE id_personagem = ?`, [id_personagem], (err, row) => {
+  db.run(`DELETE FROM personagem WHERE id_personagem = ?`, [id_personagem], function(err) {
     if (err) {
       return console.error(err.message);
     }
-    
     return res.status(200).json({
       status: 'success',
-      message: 'Personagem exluido com sucesso XQDL!'
+      message: 'Personagem excluído com sucesso!'
     });
   });
+  
 
   db.close((err) => {
     if (err) {
