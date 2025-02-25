@@ -15,11 +15,11 @@ app.get('/formulario.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public','formulario.html' ));
 });
 
-app.post('/registra-usuario', (req, res) => {
+app.post('/registra-personagem', (req, res) => {
   const {nome_P, desenho_P, idade} = req.body;
   // Aqui começa a validação dos campos do formulário
   let erro = "";
-  if(nome.length < 1 || desenho_P.length < 1 || idade.length < 1){
+  if(nome_P.length < 1 || desenho_P.length < 1 || idade.length < 1){
       erro += 'Por favor, preencha todos os campos corretamente!<br>';
   }
   if(erro){
@@ -135,8 +135,8 @@ app.post('/edita-usuario', (req, res) => {
   }
 });
 
-app.get('/ver_usuarios', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public','consulta_usuarios.html' ));
+app.get('/ver_personagem', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public','consulta_personagem.html' ));
 });
 
 app.post('/buscar-usuarios', (req, res) => {
@@ -197,7 +197,7 @@ app.post('/procurar', (req, res) => {
 });
 
 app.post('/procurarId', (req, res) => {
-  const {id} = req.body;
+  const {id_personagem} = req.body;
   let db = new sqlite3.Database('./db/banco.db', (err) => {
     if (err) {
       return console.error(err.message);
@@ -214,7 +214,7 @@ app.post('/procurarId', (req, res) => {
       status: 'success',
       message: 'Dados buscados com sucesso!',
       nome_P: row.nome_P,
-      desenho_P_P: row.desenho_P
+      desenho_P: row.desenho_P
     });
   });
 
@@ -235,7 +235,7 @@ app.post('/excluir_usuario', (req, res) => {
     console.log('Conectou com o banco de dados!');
   });
 
-  db.run(`DELETE FROM usuario WHERE id_personagem = ?`, [id_personagem], (err, row) => {
+  db.run(`DELETE FROM personagem WHERE id_personagem = ?`, [id_personagem], (err, row) => {
     if (err) {
       return console.error(err.message);
     }

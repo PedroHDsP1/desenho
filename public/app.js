@@ -1,7 +1,7 @@
 const form = document.getElementById('form_inscricao');
-const nome_P = document.getElementById('nome');
-const desenho_P = document.getElementById('email');
-const idade = document.getElementById('senha');
+const nome_P = document.getElementById('nome_P');
+const desenho_P = document.getElementById('desenho_P');
+const idade = document.getElementById('idade');
 
 
 form.addEventListener('submit', async (e) => {
@@ -9,12 +9,12 @@ form.addEventListener('submit', async (e) => {
 
     const formData = {
         nome: nome_P.value,
-        email: desenho_P.value,
-        senha: idade.value,
+        desenho_P: desenho_P.value,
+        idade: idade.value,
     };
 
     try{
-        const response = await fetch('/registra-nome_P', {
+        const response = await fetch('/registra-personagem', {
             method: 'POST',
             headers: {
                 'Content-Type':'application/json'
